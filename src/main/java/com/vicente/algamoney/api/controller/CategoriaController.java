@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,8 +35,13 @@ public class CategoriaController {
 	}
 	
 	@GetMapping("/{id}")
-	public Optional<Categoria> findById(@PathVariable Long id) {
-		return categoriaRepository.findById(id);
+	public ResponseEntity<Categoria> findById(@PathVariable Long id) {
+		Optional<Categoria> optional = categoriaRepository.findById(id);
+		if (optional.isPresent()) {
+			Categoria categoria = optional.get();
+			return ResponseEntity.ok().body(categoria);
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 	
 	@PostMapping
