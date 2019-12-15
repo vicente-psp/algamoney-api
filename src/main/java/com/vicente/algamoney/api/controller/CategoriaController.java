@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.xml.ws.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class CategoriaController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Categoria> create(@RequestBody Categoria entity) {
+	public ResponseEntity<Categoria> create(@Valid @RequestBody Categoria entity) {
 		Categoria savedEntity = categoriaRepository.save(entity);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
