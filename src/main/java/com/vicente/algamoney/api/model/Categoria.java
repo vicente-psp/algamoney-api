@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"name"})
 @ToString
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
