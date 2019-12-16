@@ -5,7 +5,7 @@ CREATE TABLE tb_pessoa (
 	numero VARCHAR(30),
 	complemento VARCHAR(30),
 	bairro VARCHAR(30),
-	cep VARCHAR(30),
+	cep VARCHAR(10),
 	cidade VARCHAR(30),
 	estado VARCHAR(30),
 	ativo BOOLEAN NOT NULL
