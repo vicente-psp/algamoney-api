@@ -15,7 +15,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@EqualsAndHashCode(exclude = {"name"})
+
+@EqualsAndHashCode(exclude = {"nome"})
 @ToString
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
@@ -29,7 +30,7 @@ public class Categoria {
 	
 	@NotNull
 	@Size(min = 3, max = 50)
-	private String name;
+	private String nome;
 	
 }
  
