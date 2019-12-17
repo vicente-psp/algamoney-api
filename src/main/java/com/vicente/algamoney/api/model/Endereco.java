@@ -32,7 +32,7 @@ public class Endereco {
 	@Size(min = 3, max = 30)
 	private String cidade;
 	
-	@Size(min = 3, max = 30)
+	@Size(min = 2, max = 30)
 	private String estado;
 
 }
