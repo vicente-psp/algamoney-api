@@ -6,7 +6,6 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -25,12 +24,15 @@ import com.vicente.algamoney.api.event.RecursoCriadoEvent;
 import com.vicente.algamoney.api.generics.GenericOperationsController;
 import com.vicente.algamoney.api.model.Pessoa;
 import com.vicente.algamoney.api.repository.PessoaRepository;
+import com.vicente.algamoney.api.service.PessoaService;
 
 @RestController
 @RequestMapping("/pessoas")
 public class PessoaController implements GenericOperationsController<Pessoa> {
 	
 	@Autowired private PessoaRepository pessoaRepository;
+	
+	@Autowired private PessoaService pessoaService;
 	
 	@Autowired private ApplicationEventPublisher publisher;
 	
@@ -58,19 +60,8 @@ public class PessoaController implements GenericOperationsController<Pessoa> {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Pessoa> put(@PathVariable Long id, @Valid @RequestBody Pessoa entity) {
-		Optional<Pessoa> optional = pessoaRepository.findById(id);
-		
-		if (optional.isPresent()) {
-			Pessoa pessoa = optional.get();
-			
-			BeanUtils.copyProperties(entity, pessoa, "id");
-			
-			pessoa = pessoaRepository.save(pessoa);
-			
-			return ResponseEntity.ok(pessoa);
-		}
-		
-		return ResponseEntity.notFound().build();
+		Pessoa pessoa = pessoaService.update(id, entity);
+		return ResponseEntity.ok(pessoa);
 	}
 	
 	@DeleteMapping("/{id}")
