@@ -37,6 +37,7 @@ public class Pessoa {
 	@NotNull
 	private Boolean ativo;
 	
-	@Embedded
+	@Embedded @Valid
 	private Endereco endereco;
+	
 }
