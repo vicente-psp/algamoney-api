@@ -12,7 +12,8 @@ public interface GenericOperationsController<E> {
 	ResponseEntity<E> post(E entity, HttpServletResponse response);
 	ResponseEntity<E> get(Long id);
 	ResponseEntity<E> put(Long id, E entity);
-	ResponseEntity<?> delete(Long id);
+	
+	void delete(Long id);
 	
 	List<E> get();
 

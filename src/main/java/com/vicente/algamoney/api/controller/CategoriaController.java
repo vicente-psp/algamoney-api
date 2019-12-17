@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vicente.algamoney.api.event.RecursoCriadoEvent;
@@ -73,13 +74,9 @@ public class CategoriaController implements GenericOperationsController<Categori
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> delete(@PathVariable Long id) {
-		Optional<Categoria> optional = categoriaRepository.findById(id);
-		if (optional.isPresent()) {
-			categoriaRepository.deleteById(id);
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-		}
-		return ResponseEntity.notFound().build();
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable Long id) {
+		categoriaRepository.deleteById(id);
 	}
 	
 }
