@@ -16,13 +16,23 @@ public class PessoaService {
 	@Autowired private PessoaRepository repository;
 	
 	public Pessoa update(Long id, Pessoa entity) {
+		Pessoa pessoa = findPessoaById(id);
+		BeanUtils.copyProperties(entity, pessoa, "id");
+		return repository.save(pessoa);
+	}
+
+	public void updatePropertyAtivo(Long id, Boolean ativo) {
+		Pessoa entity = findPessoaById(id);
+		entity.setAtivo(ativo);
+		repository.save(entity);
+	}
+
+	private Pessoa findPessoaById(Long id) {
 		Optional<Pessoa> optional = repository.findById(id);
-		if (optional.isPresent()) {
-			Pessoa pessoa = optional.get();
-			BeanUtils.copyProperties(entity, pessoa, "id");
-			return repository.save(pessoa);
+		if (!optional.isPresent()) {
+			throw new EmptyResultDataAccessException(1);
 		}
-		throw new EmptyResultDataAccessException(1);
+		return optional.get();
 	}
 
 }

@@ -64,6 +64,12 @@ public class PessoaController implements GenericOperationsController<Pessoa> {
 		return ResponseEntity.ok(pessoa);
 	}
 	
+	@PutMapping("/{id}/ativo")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void updatePropertyAtivo(@PathVariable Long id, @RequestBody Boolean ativo) {
+		pessoaService.updatePropertyAtivo(id, ativo);
+	}
+	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {
