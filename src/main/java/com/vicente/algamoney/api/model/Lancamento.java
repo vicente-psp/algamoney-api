@@ -40,6 +40,7 @@ public class Lancamento {
 	@Size(min = 3, max = 50)
 	private String descricao;
 	
+	@NotNull
 	@Column(name = "data_vencimento")
 	private LocalDate dataVencimento;
 	
