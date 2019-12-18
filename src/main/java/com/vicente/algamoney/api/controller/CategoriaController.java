@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,11 +43,11 @@ public class CategoriaController implements GenericOperationsController<Categori
 	@GetMapping("/{id}")
 	public ResponseEntity<Categoria> get(@PathVariable Long id) {
 		Optional<Categoria> optional = categoriaRepository.findById(id);
-		if (optional.isPresent()) {
-			Categoria entity = optional.get();
-			return ResponseEntity.ok().body(entity);
+		if (!optional.isPresent()) {
+			throw new EmptyResultDataAccessException(1);
 		}
-		return ResponseEntity.notFound().build();
+		Categoria entity = optional.get();
+		return ResponseEntity.ok().body(entity);
 	}
 	
 	@PostMapping

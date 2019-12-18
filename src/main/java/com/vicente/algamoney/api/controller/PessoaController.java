@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -44,11 +45,11 @@ public class PessoaController implements GenericOperationsController<Pessoa> {
 	@GetMapping("/{id}")
 	public ResponseEntity<Pessoa> get(@PathVariable Long id) {
 		Optional<Pessoa> optional = pessoaRepository.findById(id);
-		if (optional.isPresent()) {
-			Pessoa entity = optional.get();
-			return ResponseEntity.ok().body(entity);
+		if (!optional.isPresent()) {
+			throw new EmptyResultDataAccessException(1);
 		}
-		return ResponseEntity.notFound().build();
+		Pessoa entity = optional.get();
+		return ResponseEntity.ok().body(entity);
 	}
 	
 	@PostMapping
