@@ -18,7 +18,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 
-@EqualsAndHashCode(exclude = {"nome", "endereco"})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
@@ -26,6 +26,7 @@ import lombok.ToString;
 @Table(name = "tb_pessoa")
 public class Pessoa {
 
+	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
