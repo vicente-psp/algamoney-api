@@ -77,7 +77,7 @@ public class AlgaMoneyExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@Getter @Setter
 	@AllArgsConstructor
-	private static class Erro {
+	public static class Erro {
 		
 		private String userMessage;
 		private String developerMessage;
