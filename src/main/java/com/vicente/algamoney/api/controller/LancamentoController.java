@@ -12,7 +12,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,6 +27,7 @@ import com.vicente.algamoney.api.exceptionhandler.AlgaMoneyExceptionHandler.Erro
 import com.vicente.algamoney.api.generics.GenericOperationsController;
 import com.vicente.algamoney.api.model.Lancamento;
 import com.vicente.algamoney.api.repository.LancamentoRepository;
+import com.vicente.algamoney.api.repository.filter.LancamentoFilter;
 import com.vicente.algamoney.api.service.LancamentoService;
 import com.vicente.algamoney.api.service.exception.PessoaInativaException;
 import com.vicente.algamoney.api.service.exception.PessoaInexistenteException;
@@ -47,6 +47,11 @@ public class LancamentoController implements GenericOperationsController<Lancame
 	@GetMapping
 	public List<Lancamento> get() {
 		return repository.findAll();
+	}
+	
+	@GetMapping("/filtro")
+	public List<Lancamento> getFilter(LancamentoFilter lancamentoFilter) {
+		return repository.filtrar(lancamentoFilter);
 	}
 
 	@GetMapping("/{id}")
