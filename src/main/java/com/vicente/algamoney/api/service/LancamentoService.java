@@ -15,7 +15,7 @@ import com.vicente.algamoney.api.service.exception.PessoaInexistenteException;
 @Service
 public class LancamentoService {
 	
-	@Autowired private LancamentoRepository LancamentoRepository;
+	@Autowired private LancamentoRepository lancamentoRepository;
 	
 	@Autowired private PessoaRepository pessoaRepository;
 	
@@ -30,7 +30,7 @@ public class LancamentoService {
 			throw new PessoaInexistenteException();
 		}
 		
-		return LancamentoRepository.save(entity);
+		return lancamentoRepository.save(entity);
 	}
 
 }
