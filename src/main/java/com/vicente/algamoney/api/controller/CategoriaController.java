@@ -62,6 +62,7 @@ public class CategoriaController implements GenericOperationsController<Categori
 	}
 	
 	@PutMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Categoria> put(@PathVariable Long id, @Valid @RequestBody Categoria entity) {
 		Optional<Categoria> optional = categoriaRepository.findById(id);
 		
@@ -80,6 +81,7 @@ public class CategoriaController implements GenericOperationsController<Categori
 	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasAuthority('ROLE_REMOVER_CATEGORIA') and #oauth2.hasScope('write')")
 	public void delete(@PathVariable Long id) {
 		categoriaRepository.deleteById(id);
 	}

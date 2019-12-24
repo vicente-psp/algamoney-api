@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,11 +39,13 @@ public class PessoaController implements GenericOperationsController<Pessoa> {
 	@Autowired private ApplicationEventPublisher publisher;
 	
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasScope('read')")
 	public List<Pessoa> get() {
 		return pessoaRepository.findAll();
 	}
 	
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasScope('read')")
 	public ResponseEntity<Pessoa> get(@PathVariable Long id) {
 		Optional<Pessoa> optional = pessoaRepository.findById(id);
 		if (!optional.isPresent()) {
@@ -53,6 +56,7 @@ public class PessoaController implements GenericOperationsController<Pessoa> {
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Pessoa> post(@Valid @RequestBody Pessoa entity, HttpServletResponse response) {
 		Pessoa savedEntity = pessoaRepository.save(entity);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, savedEntity.getId()));
@@ -60,6 +64,7 @@ public class PessoaController implements GenericOperationsController<Pessoa> {
 	}
 	
 	@PutMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Pessoa> put(@PathVariable Long id, @Valid @RequestBody Pessoa entity) {
 		Pessoa pessoa = pessoaService.update(id, entity);
 		return ResponseEntity.ok(pessoa);
@@ -67,12 +72,14 @@ public class PessoaController implements GenericOperationsController<Pessoa> {
 	
 	@PutMapping("/{id}/ativo")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasScope('write')")
 	public void updatePropertyAtivo(@PathVariable Long id, @RequestBody Boolean ativo) {
 		pessoaService.updatePropertyAtivo(id, ativo);
 	}
 	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasAuthority('ROLE_REMOVER_PESSOA') and #oauth2.hasScope('write')")
 	public void delete(@PathVariable Long id) {
 		pessoaRepository.deleteById(id);
 	}

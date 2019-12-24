@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vicente.algamoney.api.event.RecursoCriadoEvent;
 import com.vicente.algamoney.api.exceptionhandler.AlgaMoneyExceptionHandler.Erro;
-import com.vicente.algamoney.api.generics.GenericOperationsController;
 import com.vicente.algamoney.api.model.Lancamento;
 import com.vicente.algamoney.api.repository.LancamentoRepository;
 import com.vicente.algamoney.api.repository.filter.LancamentoFilter;
@@ -38,7 +38,7 @@ import com.vicente.algamoney.api.service.exception.PessoaInexistenteException;
 
 @RestController
 @RequestMapping("/lancamentos")
-public class LancamentoController implements GenericOperationsController<Lancamento> {
+public class LancamentoController {
 
 	@Autowired private LancamentoRepository repository;
 	
@@ -47,18 +47,15 @@ public class LancamentoController implements GenericOperationsController<Lancame
 	@Autowired private ApplicationEventPublisher publisher;
 	
 	@Autowired private MessageSource messageSource;
-
-	@GetMapping
-	public List<Lancamento> get() {
-		return repository.findAll();
-	}
 	
-	@GetMapping("/filtro")
-	public Page<Lancamento> getFilter(LancamentoFilter lancamentoFilter, Pageable pageable) {
+	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
+	public Page<Lancamento> get(LancamentoFilter lancamentoFilter, Pageable pageable) {
 		return repository.filtrar(lancamentoFilter, pageable);
 	}
 
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
 	public ResponseEntity<Lancamento> get(@PathVariable Long id) {
 		Optional<Lancamento> optional = repository.findById(id);
 		if (!optional.isPresent()) {
@@ -69,20 +66,16 @@ public class LancamentoController implements GenericOperationsController<Lancame
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO') and #oauth2.hasScope('write')")
 	public ResponseEntity<Lancamento> post(@Valid @RequestBody Lancamento entity, HttpServletResponse response) {
 		Lancamento savedEntity = service.save(entity);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, savedEntity.getId()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(savedEntity);
 	}
 
-	@Override
-	public ResponseEntity<Lancamento> put(Long id, Lancamento entity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@DeleteMapping("/{id}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasAuthority('ROLE_REMOVER_LANCAMENTO') and #oauth2.hasScope('write')")
 	public void delete(@PathVariable Long id) {
 		repository.deleteById(id);
 	}
