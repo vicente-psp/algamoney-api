@@ -65,7 +65,5 @@ public class Lancamento {
 	@ManyToOne
 	@JoinColumn(name = "id_pessoa")
 	private Pessoa pessoa;
-	
-	
 
 }

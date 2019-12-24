@@ -32,6 +32,7 @@ import com.vicente.algamoney.api.exceptionhandler.AlgaMoneyExceptionHandler.Erro
 import com.vicente.algamoney.api.model.Lancamento;
 import com.vicente.algamoney.api.repository.LancamentoRepository;
 import com.vicente.algamoney.api.repository.filter.LancamentoFilter;
+import com.vicente.algamoney.api.repository.projection.ResumoLancamento;
 import com.vicente.algamoney.api.service.LancamentoService;
 import com.vicente.algamoney.api.service.exception.PessoaInativaException;
 import com.vicente.algamoney.api.service.exception.PessoaInexistenteException;
@@ -52,6 +53,12 @@ public class LancamentoController {
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
 	public Page<Lancamento> get(LancamentoFilter lancamentoFilter, Pageable pageable) {
 		return repository.filtrar(lancamentoFilter, pageable);
+	}
+	
+	@GetMapping(params = "resumo")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
+	public Page<ResumoLancamento> getResumo(LancamentoFilter lancamentoFilter, Pageable pageable) {
+		return repository.resumo(lancamentoFilter, pageable);
 	}
 
 	@GetMapping("/{id}")
