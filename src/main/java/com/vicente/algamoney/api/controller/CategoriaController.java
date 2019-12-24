@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,11 +37,13 @@ public class CategoriaController implements GenericOperationsController<Categori
 	@Autowired private ApplicationEventPublisher publisher;
 	
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')")
 	public List<Categoria> get() {
 		return categoriaRepository.findAll();
 	}
 	
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')")
 	public ResponseEntity<Categoria> get(@PathVariable Long id) {
 		Optional<Categoria> optional = categoriaRepository.findById(id);
 		if (!optional.isPresent()) {
@@ -51,6 +54,7 @@ public class CategoriaController implements GenericOperationsController<Categori
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Categoria> post(@Valid @RequestBody Categoria entity, HttpServletResponse response) {
 		Categoria savedEntity = categoriaRepository.save(entity);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, savedEntity.getId()));
