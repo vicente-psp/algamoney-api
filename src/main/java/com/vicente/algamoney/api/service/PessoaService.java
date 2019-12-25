@@ -18,6 +18,7 @@ public class PessoaService {
 	public Pessoa update(Long id, Pessoa entity) {
 		Pessoa pessoa = findPessoaById(id);
 		BeanUtils.copyProperties(entity, pessoa, "id");
+		entity.setId(id);
 		return repository.save(pessoa);
 	}
 

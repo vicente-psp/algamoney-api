@@ -2,7 +2,9 @@ package com.vicente.algamoney.api.service;
 
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.vicente.algamoney.api.model.Lancamento;
@@ -20,17 +22,32 @@ public class LancamentoService {
 	@Autowired private PessoaRepository pessoaRepository;
 	
 	public Lancamento save(Lancamento entity) {
-		Optional<Pessoa> pOptional = pessoaRepository.findById(entity.getPessoa().getId());
-		if (pOptional.isPresent()) {
-			Pessoa pessoa = pOptional.get();
+		validaPessoa(entity.getPessoa().getId(), true);
+		return lancamentoRepository.save(entity);
+	}
+	
+	public Lancamento update(Long id, Lancamento entity) {
+		Optional<Lancamento> optional = lancamentoRepository.findById(id);
+		if (!optional.isPresent()) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		Lancamento lancamento = optional.get();
+		validaPessoa(entity.getPessoa().getId(), lancamento.getPessoa().getId() != entity.getPessoa().getId());
+		BeanUtils.copyProperties(entity, lancamento, "id");
+		entity.setId(id);
+		return lancamentoRepository.save(entity);
+	}
+
+	private void validaPessoa(Long id, boolean validaAtivo) {
+		Optional<Pessoa> optional = pessoaRepository.findById(id);
+		if (!optional.isPresent()) {
+			throw new PessoaInexistenteException();
+		} else if(validaAtivo) {
+			Pessoa pessoa = optional.get();
 			if (pessoa.isInativo()) {
 				throw new PessoaInativaException();
 			}
-		} else {
-			throw new PessoaInexistenteException();
 		}
-		
-		return lancamentoRepository.save(entity);
 	}
 
 }
