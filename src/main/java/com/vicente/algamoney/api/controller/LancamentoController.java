@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vicente.algamoney.api.event.RecursoCriadoEvent;
 import com.vicente.algamoney.api.exceptionhandler.AlgaMoneyExceptionHandler.Erro;
+import com.vicente.algamoney.api.generics.GenericOperationsController;
 import com.vicente.algamoney.api.model.Lancamento;
 import com.vicente.algamoney.api.repository.LancamentoRepository;
 import com.vicente.algamoney.api.repository.filter.LancamentoFilter;
@@ -39,7 +40,7 @@ import com.vicente.algamoney.api.service.exception.PessoaInexistenteException;
 
 @RestController
 @RequestMapping("/lancamentos")
-public class LancamentoController {
+public class LancamentoController implements GenericOperationsController<Lancamento> {
 
 	@Autowired private LancamentoRepository repository;
 	
