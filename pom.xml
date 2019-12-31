@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>com.vicente.algamoney-api</groupId>
 	<artifactId>algamoney-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>algamoney-api</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Algamoney API</description>
 
 	<properties>
 		<java.version>1.8</java.version>
