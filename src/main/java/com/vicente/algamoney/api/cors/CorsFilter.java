@@ -31,10 +31,11 @@ public class CorsFilter implements Filter {
 		HttpServletResponse resp = (HttpServletResponse) response;
 		
 		resp.setHeader("Access-Control-Allow-Origin", algamoneyApiProperty.getOriginAllow());
+		resp.setHeader("Access-Control-Allow-Credentials", "true");
 		
 		if ("OPTIONS".equals(req.getMethod()) && algamoneyApiProperty.getOriginAllow().equals(req.getHeader("Origin"))) {
 			resp.setHeader("Access-Control-Allow-Methods", "POST, GET, ,DELETE, PUT, OPTIONS");
-			resp.setHeader("Access-Control-Allow-Headers", "Authorizarion, Content-Type, Accept");
+			resp.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept");
 			resp.setHeader("Access-Control-Max-Age", "3600");
 			
 			resp.setStatus(HttpServletResponse.SC_OK);
