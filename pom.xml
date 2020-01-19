@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.vicente.algamoney-api</groupId>
 	<artifactId>algamoney-api</artifactId>
-	<version>0.0.5-SNAPSHOT</version>
+	<version>0.0.6-SNAPSHOT</version>
 	<name>algamoney-api</name>
 	<description>Algamoney API</description>
 
