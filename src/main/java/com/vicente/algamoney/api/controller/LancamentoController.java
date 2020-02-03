@@ -1,5 +1,6 @@
 package com.vicente.algamoney.api.controller;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vicente.algamoney.api.dto.LancamentoEstatisticaCategoria;
 import com.vicente.algamoney.api.event.RecursoCriadoEvent;
 import com.vicente.algamoney.api.exceptionhandler.AlgaMoneyExceptionHandler.Erro;
 import com.vicente.algamoney.api.generics.GenericOperationsController;
@@ -50,6 +52,12 @@ public class LancamentoController implements GenericOperationsController<Lancame
 	@Autowired private ApplicationEventPublisher publisher;
 	
 	@Autowired private MessageSource messageSource;
+	
+	@GetMapping("/estatistica/por-categoria")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
+	public List<LancamentoEstatisticaCategoria> porCategoria() {
+		return repository.porCategoria(LocalDate.now());
+	}
 	
 	@GetMapping
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
