@@ -15,7 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class LancamentoEstatisticaPessoa {
 	
-	private TipoLancamento tipoLancamento;
+	private TipoLancamento tipo;
 	
 	private Pessoa pessoa;
 	
